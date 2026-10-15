@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>آموزش جامع Git و GitHub در VS Code (از صفر تا صد)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0f172a;
+        --card: #1e293b;
+        --text: #f8fafc;
+        --muted: #94a3b8;
+        --accent: #38bdf8;
+        --green: #22c55e;
+        --amber: #f59e0b;
+        --purple: #a855f7;
+        --red: #ef4444;
+        --code-bg: #090d16;
+        --border: #334155;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Vazirmatn", Tahoma, "Segoe UI", sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        line-height: 1.85;
+        padding: 30px 15px;
+      }
+      .container {
+        max-width: 950px;
+        margin: 0 auto;
+      }
+      header {
+        text-align: center;
+        margin-bottom: 24px;
+        padding: 28px 20px;
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      }
+      header h1 {
+        color: var(--accent);
+        font-size: 1.75rem;
+        margin-bottom: 10px;
+      }
+      header p {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      .search-wrapper {
+        margin: 20px auto 15px;
+        max-width: 550px;
+        position: relative;
+      }
+      .search-input {
+        width: 100%;
+        padding: 11px 16px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--code-bg);
+        color: var(--text);
+        font-family: inherit;
+        font-size: 0.92rem;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .search-input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+      }
+      .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        margin-top: 15px;
+      }
+      .nav-links a {
+        color: var(--text);
+        background: #334155;
+        text-decoration: none;
+        font-size: 0.82rem;
+        padding: 6px 13px;
+        border-radius: 6px;
+        transition: 0.2s;
+      }
+      .nav-links a:hover {
+        background: var(--accent);
+        color: #000;
+        transform: translateY(-2px);
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 26px;
+        transition: border-color 0.2s;
+      }
+      .card:hover {
+        border-color: #475569;
+      }
+      .card h2 {
+        font-size: 1.22rem;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 12px;
+      }
+      .badge {
+        font-size: 0.75rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+        color: #000;
+        font-weight: 700;
+      }
+      .bg-green {
+        background: var(--green);
+      }
+      .bg-accent {
+        background: var(--accent);
+      }
+      .bg-amber {
+        background: var(--amber);
+      }
+      .bg-purple {
+        background: var(--purple);
+        color: #fff;
+      }
+      .bg-red {
+        background: var(--red);
+        color: #fff;
+      }
+      .desc {
+        color: var(--muted);
+        font-size: 0.93rem;
+        margin-bottom: 18px;
+      }
+      .step {
+        margin-bottom: 18px;
+      }
+      .step-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: #e2e8f0;
+      }
+      .code-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--code-bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px 14px;
+        direction: ltr;
+        text-align: left;
+        font-family: Consolas, Monaco, monospace;
+        font-size: 0.9rem;
+        color: #38bdf8;
+        margin-top: 6px;
+      }
+      .code-box pre {
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-break: break-all;
+        margin: 0;
+      }
+      .copy-btn {
+        background: #334155;
+        color: #fff;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 0.8rem;
+        margin-left: 12px;
+        flex-shrink: 0;
+        transition: 0.2s;
+      }
+      .copy-btn:hover {
+        background: var(--accent);
+        color: #000;
+      }
+      .note {
+        background: rgba(56, 189, 248, 0.1);
+        border-right: 4px solid var(--accent);
+        padding: 12px 15px;
+        border-radius: 6px;
+        font-size: 0.88rem;
+        margin-top: 14px;
+      }
+      .error-item {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid #334155;
+        border-right: 4px solid var(--red);
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 18px;
+      }
+      .error-title {
+        direction: ltr;
+        text-align: left;
+        font-family: Consolas, monospace;
+        color: #f87171;
+        font-weight: bold;
+        font-size: 0.92rem;
+        background: rgba(239, 68, 68, 0.1);
+        padding: 6px 10px;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        display: inline-block;
+        width: 100%;
+      }
+      .error-why {
+        font-size: 0.9rem;
+        color: var(--muted);
+        margin-bottom: 8px;
+      }
+      .error-fix {
+        font-size: 0.92rem;
+        color: #e2e8f0;
+        margin-bottom: 8px;
+      }
+      code {
+        font-family: Consolas, Monaco, monospace;
+        background: rgba(255, 255, 255, 0.08);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.88em;
+        color: var(--accent);
+      }
+      footer {
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.85rem;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+      }
+      .hidden {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>مرجع جامع Git و GitHub در VS Code</h1>
+        <p>
+          آموزش گام‌به‌گام از تنظیمات اولیه و پوش کردن پروژه تا مدیریت لاگ‌ها و
+          رفع تمام خطاهای رایج
+        </p>
+
+        <div class="search-wrapper">
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="🔍 جستجو در دستورات، توضیحات یا متن خطاها (مثلاً commit یا 100.00 MB)..."
+            oninput="filterContent()"
+          />
+        </div>
+
+        <div class="nav-links">
+          <a href="#setup">۰. پیش‌نیازها</a>
+          <a href="#new-project">۱. پوش پروژه جدید</a>
+          <a href="#update">۲. آپدیت پروژه</a>
+          <a href="#change-repo">۳. تغییر رپوزیتوری</a>
+          <a href="#tools">۴. دستورات کاربردی</a>
+          <a href="#gitignore">۵. فایل gitignore.</a>
+          <a href="#errors">۶. رفع خطاهای رایج</a>
+        </div>
+      </header>
+
+      <!-- بخش ۰ -->
+      <div class="card searchable-card" id="setup">
+        <h2>
+          <span class="badge bg-purple">فقط یک‌بار در سیستم</span> ۰. پیش‌نیازها
+          و معرفی هویت به گیت
+        </h2>
+        <p class="desc">
+          بعد از نصب برنامه Git روی سیستم، قبل از اینکه بتوانید اولین کامیت خود
+          را ثبت کنید، باید نام و ایمیل اکانت گیت‌هاب خود را به گیت معرفی کنید.
+          ترمینال VS Code را با کلیدهای <code>Ctrl + `</code> باز کنید و این دو
+          دستور را بزنید:
+        </p>
+
+        <div class="step">
+          <div class="step-title">
+            ۱. تنظیم نام کاربری (به جای Your Name نام خود را بنویسید):
+          </div>
+          <div class="code-box">
+            <pre>git config --global user.name "Your Name"</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-title">
+            ۲. تنظیم ایمیل (ایمیل اکانت گیت‌هاب خود را وارد کنید):
+          </div>
+          <div class="code-box">
+            <pre>git config --global user.email "your_email@example.com"</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+        <div class="note">
+          نکته: به دلیل وجود <code>--global</code>، این کار را فقط یک بار پس از
+          نصب ویندوز/گیت انجام می‌دهید و برای تمام پروژه‌های بعدی ذخیره می‌ماند.
+        </div>
+      </div>
+
+      <!-- بخش ۱ -->
+      <div class="card searchable-card" id="new-project">
+        <h2>
+          <span class="badge bg-accent">شروع پروژه</span> ۱. پوش کردن یک پروژه
+          جدید در گیت‌هاب (برای بار اول)
+        </h2>
+        <p class="desc">
+          ابتدا وارد سایت گیت‌هاب شوید و یک رپوزیتوری جدید و کاملاً خالی (بدون
+          تیک زدن Add a README) بسازید. سپس پوشه پروژه را در VS Code باز کرده و
+          دستورات زیر را به ترتیب در ترمینال اجرا کنید:
+        </p>
+
+        <div class="step">
+          <div class="step-title">
+            ۱. راه‌اندازی گیت در پوشه پروژه (ساخت پوشه مخفی .git):
+          </div>
+          <div class="code-box">
+            <pre>git init</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-title">
+            ۲. افزودن تمام فایل‌های پوشه به لیست انتظار (Staging):
+          </div>
+          <div class="code-box">
+            <pre>git add .</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-title">۳. ثبت اولین نسخه در حافظه گیت:</div>
+          <div class="code-box">
+            <pre>git commit -m "Initial commit"</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-title">۴. تغییر نام شاخه اصلی به main:</div>
+          <div class="code-box">
+            <pre>git branch -M main</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-title">۵. اتصال پوشه به آدرس رپوزیتوری گیت‌هاب:</div>
+          <div class="code-box">
+            <pre>
+git remote add origin https://github.com/USERNAME/REPOSITORY-NAME.git</pre
+            >
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-title">
+            ۶. ارسال فایل‌ها به گیت‌هاب برای بار اول:
+          </div>
+          <div class="code-box">
+            <pre>git push -u origin main</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- بخش ۲ -->
+      <div class="card searchable-card" id="update">
+        <h2>
+          <span class="badge bg-green">استفاده روزانه</span> ۲. آپدیت کردن
+          پروژه‌ای که قبلاً پوش شده است
+        </h2>
+        <p class="desc">
+          تنظیمات گیتِ هر پروژه داخل همان پوشه ذخیره شده است. بنابراین حتی اگر
+          پوشه را ببندید، روی پروژه‌های دیگر کار کنید و دوباره به پوشه قبلی
+          برگردید، گیت خودش آدرس رپوزیتوری آن را می‌شناسد. بعد از هر ویرایش، فقط
+          این ۳ دستور را بزنید:
+        </p>
+
+        <div class="step">
+          <div class="step-title">۱. انتخاب تمام فایل‌های تغییریافته:</div>
+          <div class="code-box">
+            <pre>git add .</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-title">
+            ۲. ثبت تغییرات به عنوان یک لاگ جدید در تاریخچه:
+          </div>
+          <div class="code-box">
+            <pre>git commit -m "توضیح کوتاه درباره تغییرات انجام شده"</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-title">۳. ارسال آپدیت به گیت‌هاب:</div>
+          <div class="code-box">
+            <pre>git push</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+        <div class="note">
+          نکته: فایل‌های قبل از تغییر هرگز از حافظه گیت‌هاب پاک نمی‌شوند؛ بلکه
+          تمام نسخه‌های قبلی در بخش Commits گیت‌هاب به صورت تاریخچه (Log) باقی
+          می‌مانند.
+        </div>
+      </div>
+
+      <!-- بخش ۳ -->
+      <div class="card searchable-card" id="change-repo">
+        <h2>
+          <span class="badge bg-amber">تغییر مقصد</span> ۳. ارسال پروژه فعلی به
+          یک رپوزیتوری جدید
+        </h2>
+        <p class="desc">
+          اگر می‌خواهید پروژه‌ای را از رپوزیتوری قبلی جدا کنید و از این به بعد
+          روی یک رپوزیتوری جدید پوش کنید (بدون تغییر نام پوشه و بدون پاک شدن
+          رپوزیتوری قبلی):
+        </p>
+
+        <div class="step">
+          <div class="step-title">۱. تغییر آدرس مقصد به رپوزیتوری جدید:</div>
+          <div class="code-box">
+            <pre>
+git remote set-url origin https://github.com/USERNAME/NEW-REPOSITORY-NAME.git</pre
+            >
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-title">۲. ارسال کل پروژه به رپوزیتوری جدید:</div>
+          <div class="code-box">
+            <pre>git push -u origin main</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- بخش ۴ -->
+      <div class="card searchable-card" id="tools">
+        <h2>
+          <span class="badge bg-accent">کنترل و بازیابی</span> ۴. دستورات
+          کاربردی مدیریت پروژه
+        </h2>
+        <p class="desc">
+          دستوراتی که برای دانلود پروژه، بررسی وضعیت، دیدن لاگ‌ها و برگشت به
+          نسخه سالم قبلی استفاده می‌شوند:
+        </p>
+
+        <div class="step">
+          <div class="step-title">
+            دانلود (Clone) یک پروژه آماده از گیت‌هاب روی سیستم:
+          </div>
+          <div class="code-box">
+            <pre>git clone https://github.com/USERNAME/REPOSITORY-NAME.git</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-title">
+            مشاهده آدرس رپوزیتوری گیت‌هابِ متصل به پوشه فعلی:
+          </div>
+          <div class="code-box">
+            <pre>git remote -v</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-title">
+            مشاهده فایل‌هایی که تغییر کرده‌اند ولی هنوز کامیت نشده‌اند:
+          </div>
+          <div class="code-box">
+            <pre>git status</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-title">مشاهده تاریخچه تمام کامیت‌ها (لاگ‌ها):</div>
+          <div class="code-box">
+            <pre>git log --oneline</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-title">
+            لغو تمام تغییرات اخیر (قبل از کامیت) و بازگشت به آخرین نسخه سالم:
+          </div>
+          <div class="code-box">
+            <pre>git restore .</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- بخش ۵: gitignore -->
+      <div class="card searchable-card" id="gitignore">
+        <h2>
+          <span class="badge bg-purple">مدیریت فایل‌ها</span> ۵. جلوگیری از
+          آپلود فایل‌های اضافی با <code>.gitignore</code>
+        </h2>
+        <p class="desc">
+          برای اینکه پوشه‌های سنگین (مثل <code>node_modules</code>) یا فایل‌های
+          امنیتی (مثل <code>.env</code>) وارد گیت‌هاب نشوند، یک فایل دقیقاً با
+          نام <code>.gitignore</code> در پوشه اصلی پروژه بسازید و نام موارد
+          دلخواه را داخل آن قرار دهید:
+        </p>
+
+        <div class="step">
+          <div class="step-title">
+            نمونه محتوای استاندارد برای فایل <code>.gitignore</code>:
+          </div>
+          <div class="code-box">
+            <pre>
+node_modules/
+.env
+dist/
+build/
+.DS_Store</pre
+            >
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- بخش ۶: خطاها -->
+      <div class="card searchable-card" id="errors">
+        <h2>
+          <span class="badge bg-red">عیب‌یابی</span> ۶. خطاهای رایج هنگام کار با
+          Git و روش حل آن‌ها
+        </h2>
+        <p class="desc">
+          اگر هنگام اجرای دستورات بالا با هر یک از پیغام‌های زیر مواجه شدید،
+          مطابق راه‌حل مربوط به آن عمل کنید:
+        </p>
+
+        <!-- خطای ۱ -->
+        <div class="error-item">
+          <div class="error-title">1. error: remote origin already exists.</div>
+          <div class="error-why">
+            <strong>علت:</strong> زمانی رخ می‌دهد که دستور
+            <code>git remote add origin</code> را در پوشه‌ای می‌زنید که قبلاً یک
+            آدرس گیت‌هاب به آن داده شده است.
+          </div>
+          <div class="error-fix">
+            <strong>راه‌حل:</strong> به جای <code>add</code> از دستور
+            <code>set-url</code> استفاده کنید تا آدرس جدید جایگزین قبلی شود:
+          </div>
+          <div class="code-box">
+            <pre>
+git remote set-url origin https://github.com/USERNAME/REPOSITORY-NAME.git</pre
+            >
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+
+        <!-- خطای ۲ -->
+        <div class="error-item">
+          <div class="error-title">
+            2. ! [rejected] main -> main (fetch first) / error: failed to push
+            some refs
+          </div>
+          <div class="error-why">
+            <strong>علت:</strong> داخل رپوزیتوری گیت‌هاب فایلی وجود دارد (مثلاً
+            هنگام ساخت رپوزیتوری تیک README یا .gitignore را زده‌اید یا مستقیم
+            در سایت فایلی را تغییر داده‌اید) که روی سیستم شما نیست.
+          </div>
+          <div class="error-fix">
+            <strong>راه‌حل اول (پیشنهادی - ادغام فایل‌ها):</strong> ابتدا
+            فایل‌های گیت‌هاب را بگیرید و بعد پوش کنید:
+          </div>
+          <div class="code-box">
+            <pre>git pull origin main --allow-unrelated-histories</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+          <div class="error-fix" style="margin-top: 10px">
+            <strong
+              >راه‌حل دوم (پاک کردن محتوای گیت‌هاب و جایگزینی اجباری با فایل‌های
+              سیستم شما):</strong
+            >
+          </div>
+          <div class="code-box">
+            <pre>git push -u origin main --force</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+
+        <!-- خطای ۳ -->
+        <div class="error-item">
+          <div class="error-title">
+            3. Author identity unknown / *** Please tell me who you are.
+          </div>
+          <div class="error-why">
+            <strong>علت:</strong> گیت را تازه نصب کرده‌اید و هنوز نام و ایمیل
+            خود را تنظیم نکرده‌اید، بنابراین اجازه
+            <code>git commit</code> نمی‌دهد.
+          </div>
+          <div class="error-fix">
+            <strong>راه‌حل:</strong> نام و ایمیل خود را وارد کنید و سپس دوباره
+            دستور کامیت را بزنید:
+          </div>
+          <div class="code-box">
+            <pre>
+git config --global user.name "Your Name"
+git config --global user.email "your_email@example.com"</pre
+            >
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+
+        <!-- خطای ۴ -->
+        <div class="error-item">
+          <div class="error-title">
+            4. error: src refspec main does not match any
+          </div>
+          <div class="error-why">
+            <strong>علت:</strong> قصد دارید دستور <code>git push</code> را
+            بزنید، اما هنوز هیچ کامیتی ثبت نکرده‌اید (یا فراموش کرده‌اید
+            <code>git add .</code> و <code>git commit</code> بزنید).
+          </div>
+          <div class="error-fix">
+            <strong>راه‌حل:</strong> ابتدا فایل‌ها را اضافه و کامیت کنید و سپس
+            پوش کنید:
+          </div>
+          <div class="code-box">
+            <pre>
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git push -u origin main</pre
+            >
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+
+        <!-- خطای ۵ -->
+        <div class="error-item">
+          <div class="error-title">
+            5. fatal: not a git repository (or any of the parent directories):
+            .git
+          </div>
+          <div class="error-why">
+            <strong>علت:</strong> ترمینال در پوشه‌ای باز است که هنوز دستور
+            <code>git init</code> در آن اجرا نشده، یا در مسیر اشتباهی (مثلاً یک
+            پوشه بالاتر یا داخل یک زیرپوشه مثل <code>public</code>) قرار دارید.
+          </div>
+          <div class="error-fix">
+            <strong>راه‌حل:</strong> اگر در زیرپوشه هستید با
+            <code>cd ..</code> به پوشه اصلی برگردید، و اگر پروژه جدید است گیت را
+            راه‌اندازی کنید:
+          </div>
+          <div class="code-box">
+            <pre>git init</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+
+        <!-- خطای ۶ -->
+        <div class="error-item">
+          <div class="error-title">
+            6. warning: in the working copy of '...', LF will be replaced by
+            CRLF
+          </div>
+          <div class="error-why">
+            <strong>علت:</strong> این پیغام <strong>خطا نیست</strong>، بلکه فقط
+            یک هشدار عادی در ویندوز است که نشان می‌دهد کاراکتر پایان خط فایل‌ها
+            به استاندارد ویندوز تبدیل می‌شود.
+          </div>
+          <div class="error-fix">
+            <strong>راه‌حل:</strong> کاملاً بی‌خطر است و می‌توانید نادیده
+            بگیرید. اما اگر می‌خواهید دیگر این پیغام طولانی نمایش داده نشود، یک
+            بار این دستور را بزنید:
+          </div>
+          <div class="code-box">
+            <pre>git config --global core.autocrlf true</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+
+        <!-- خطای ۷ -->
+        <div class="error-item">
+          <div class="error-title">
+            7. nothing to commit, working tree clean
+          </div>
+          <div class="error-why">
+            <strong>علت:</strong> بعد از آخرین کامیت، هیچ تغییری در فایل‌ها
+            نداده‌اید (یا یادتان رفته فایل‌های تغییریافته را در VS Code با
+            <code>Ctrl + S</code> ذخیره کنید).
+          </div>
+          <div class="error-fix">
+            <strong>راه‌حل:</strong> ابتدا فایل‌ها را در VS Code ذخیره (Save)
+            کنید و اگر قبلاً کامیت کرده‌اید، مستقیم دستور
+            <code>git push</code> را بزنید.
+          </div>
+        </div>
+
+        <!-- خطای ۸ -->
+        <div class="error-item">
+          <div class="error-title">
+            8. remote: error: File ... is 100.00 MB; this exceeds GitHub's file
+            size limit
+          </div>
+          <div class="error-why">
+            <strong>علت:</strong> گیت‌هاب اجازه آپلود تک‌فایل‌های بالای ۱۰۰
+            مگابایت (مثل ویدیوهای حجیم یا فایل‌های فشرده بزرگ) را در حالت عادی
+            نمی‌دهد.
+          </div>
+          <div class="error-fix">
+            <strong>راه‌حل:</strong> فایل حجیم را از پوشه پروژه خارج کنید و اگر
+            قبلاً کامیت شده است، کامیت آخر را بازگردانید تا فایل از لیست خارج
+            شود:
+          </div>
+          <div class="code-box">
+            <pre>git reset --soft HEAD~1</pre>
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+
+        <!-- خطای ۹ -->
+        <div class="error-item">
+          <div class="error-title">
+            9. fatal: unable to access 'https://github.com/...': Failed to
+            connect / Recv failure
+          </div>
+          <div class="error-why">
+            <strong>علت:</strong> اختلال در اینترنت یا تنظیم نبودن
+            پراکسی/فیلترشکن روی ترمینال گیت.
+          </div>
+          <div class="error-fix">
+            <strong>راه‌حل:</strong> اتصال اینترنت را بررسی کنید. اگر قبلاً
+            پراکسی دستی روی گیت ست کرده‌اید که الان خاموش است، با دستورات زیر
+            پراکسی گیت را ریست کنید:
+          </div>
+          <div class="code-box">
+            <pre>
+git config --global --unset http.proxy
+git config --global --unset https.proxy</pre
+            >
+            <button class="copy-btn" onclick="copyCode(this)">کپی</button>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        طراحی‌شده به عنوان مرجع سریع و آزاد برای جامعه توسعه‌دهندگان فارسی‌زبان
+      </footer>
+    </div>
+
+    <script>
+      function copyCode(btn) {
+        const code = btn.previousElementSibling.innerText.trim();
+        navigator.clipboard.writeText(code).then(() => {
+          const originalText = btn.innerText;
+          btn.innerText = "کپی شد!";
+          btn.style.background = "#22c55e";
+          btn.style.color = "#000";
+          setTimeout(() => {
+            btn.innerText = originalText;
+            btn.style.background = "#334155";
+            btn.style.color = "#fff";
+          }, 1500);
+        });
+      }
+
+      function filterContent() {
+        const query = document
+          .getElementById("searchInput")
+          .value.toLowerCase()
+          .trim();
+        const cards = document.querySelectorAll(".searchable-card");
+
+        cards.forEach((card) => {
+          const text = card.innerText.toLowerCase();
+          if (text.includes(query)) {
+            card.classList.remove("hidden");
+          } else {
+            card.classList.add("hidden");
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
